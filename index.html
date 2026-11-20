@@ -4,62 +4,151 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arcadia Admin Panel</title>
+<title>Arcadia Control</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#0b1020;color:#f1f5f9;font-family:Arial,sans-serif}
-header{padding:22px;background:#131c30;border-bottom:1px solid #27334a}
-header h1{color:#5eead4;letter-spacing:2px}
-header p{color:#94a3b8;margin-top:6px}
-nav{display:flex;flex-wrap:wrap;gap:8px;padding:14px;background:#111827}
-nav button{padding:12px 16px;border:0;border-radius:8px;background:#263449;color:white}
-nav button:active{background:#0d9488}
-main{padding:20px}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:14px;margin-top:20px}
-.card{padding:20px;border:1px solid #263449;border-radius:12px;background:#131c30}
-.card p{color:#94a3b8;font-size:14px;margin-bottom:12px}
-.card h2{color:#5eead4;font-size:25px}
-.panel{background:#131c30;border:1px solid #263449;padding:20px;border-radius:12px;margin-top:20px}
-table{width:100%;border-collapse:collapse;margin-top:15px}
-td,th{text-align:left;padding:12px;border-bottom:1px solid #263449}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#0a0e17;color:#e8edf6}
+.sidebar{background:#111827;padding:20px;width:240px;position:fixed;left:0;top:0;bottom:0;border-right:1px solid #263145}
+.logo{font-size:24px;font-weight:bold;color:#5eead4;margin-bottom:35px;letter-spacing:2px}
+.menu button{width:100%;padding:14px;text-align:left;border:0;border-radius:9px;background:transparent;color:#aab7ca;margin:4px 0;font-size:15px}
+.menu button:hover,.menu button.active{background:#1e293b;color:#5eead4}
+.main{margin-left:240px;padding:25px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:25px}
+.top h1{font-size:25px}
+.tag{background:#16352f;color:#5eead4;padding:9px 12px;border-radius:20px;font-size:12px}
+.cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px}
+.card{background:#111827;border:1px solid #263145;padding:20px;border-radius:14px}
+.card p{color:#95a4bb;font-size:14px}
+.card h2{margin-top:15px;font-size:27px;color:#5eead4}
+.panel{background:#111827;border:1px solid #263145;border-radius:14px;padding:20px;margin-top:22px}
+.panel h3{margin-bottom:15px}
+table{width:100%;border-collapse:collapse}
+th,td{padding:13px;text-align:left;border-bottom:1px solid #263145;font-size:14px}
 th{color:#5eead4}
-footer{text-align:center;color:#64748b;padding:25px}
+.status{color:#5eead4}
+.muted{color:#95a4bb}
+.content{margin-top:25px}
+input{background:#0a0e17;border:1px solid #263145;color:white;padding:12px;border-radius:8px;width:100%;margin:8px 0}
+.action{background:#14b8a6;color:#07111b;border:0;border-radius:8px;padding:12px 18px;font-weight:bold}
+@media(max-width:900px){
+.sidebar{width:100%;position:relative;height:auto;border-right:0;border-bottom:1px solid #263145}
+.logo{margin-bottom:15px}
+.menu{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+.menu button{text-align:center;padding:11px 5px}
+.main{margin-left:0;padding:15px}
+.cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:450px){
+.card{padding:15px}
+.card h2{font-size:22px}
+}
 </style>
 </head>
 <body>
-<header>
-<h1>ARCADIA</h1>
-<p>Admin Control Center</p>
-</header>
-<nav>
-<button onclick="page('dashboard')">Dashboard</button>
-<button onclick="page('users')">Users</button>
-<button onclick="page('games')">Games</button>
-<button onclick="page('reports')">Reports</button>
-<button onclick="page('settings')">Settings</button>
-</nav>
-<main id="app"></main>
-<footer>ARCADIA ADMIN · DEMO PANEL</footer>
+
+<aside class="sidebar">
+<div class="logo">ARCADIA</div>
+<div class="menu">
+<button class="active" onclick="showPage('dashboard',this)">Dashboard</button>
+<button onclick="showPage('users',this)">Users</button>
+<button onclick="showPage('games',this)">Games</button>
+<button onclick="showPage('ledger',this)">Ledger</button>
+<button onclick="showPage('reports',this)">Reports</button>
+<button onclick="showPage('settings',this)">Settings</button>
+</div>
+</aside>
+
+<div class="main">
+<div class="top">
+<h1 id="heading">Dashboard</h1>
+<div class="tag">CONTROL CENTER</div>
+</div>
+<div id="app"></div>
+</div>
+
 <script>
-function page(p){
-const a=document.getElementById('app');
+function showPage(p,b){
+document.querySelectorAll('.menu button').forEach(x=>x.classList.remove('active'));
+if(b)b.classList.add('active');
+document.getElementById('heading').innerText=p.charAt(0).toUpperCase()+p.slice(1);
+let a=document.getElementById('app');
+
 if(p==='dashboard'){
-a.innerHTML='<h2>Dashboard</h2><div class="cards"><div class="card"><p>Total Users</p><h2>1,248</h2></div><div class="card"><p>Active Users</p><h2>326</h2></div><div class="card"><p>Demo Games</p><h2>8</h2></div><div class="card"><p>Virtual Credits</p><h2>85,420</h2></div></div><div class="panel"><h3>System Overview</h3><p style="margin-top:15px;color:#94a3b8">Welcome to the Arcadia admin demo.</p></div>';
+a.innerHTML=`
+<div class="cards">
+<div class="card"><p>Total Users</p><h2>1,248</h2></div>
+<div class="card"><p>Active Users</p><h2>326</h2></div>
+<div class="card"><p>Games Listed</p><h2>8</h2></div>
+<div class="card"><p>Test Credits</p><h2>85,420</h2></div>
+</div>
+<div class="panel">
+<h3>System Overview</h3>
+<p class="muted">Arcadia control center interface.</p>
+</div>
+<div class="panel">
+<h3>Recent Activity</h3>
+<table><tr><th>Activity</th><th>Status</th></tr>
+<tr><td>System initialized</td><td class="status">Ready</td></tr>
+<tr><td>Dashboard loaded</td><td class="status">Complete</td></tr>
+<tr><td>Demo environment</td><td class="status">Active</td></tr>
+</table>
+</div>`;
 }
 if(p==='users'){
-a.innerHTML='<h2>User Management</h2><div class="panel"><table><tr><th>ID</th><th>User</th><th>Status</th></tr><tr><td>1001</td><td>User 01</td><td>Active</td></tr><tr><td>1002</td><td>User 02</td><td>Active</td></tr><tr><td>1003</td><td>User 03</td><td>Inactive</td></tr></table></div>';
+a.innerHTML=`
+<div class="panel">
+<h3>User Records</h3>
+<input placeholder="Search user ID or username" id="search">
+<table><tr><th>ID</th><th>User</th><th>Status</th></tr>
+<tr><td>1001</td><td>User 01</td><td class="status">Active</td></tr>
+<tr><td>1002</td><td>User 02</td><td class="status">Active</td></tr>
+<tr><td>1003</td><td>User 03</td><td>Inactive</td></tr>
+</table>
+</div>`;
 }
 if(p==='games'){
-a.innerHTML='<h2>Game Management</h2><div class="panel"><table><tr><th>Game</th><th>Status</th></tr><tr><td>Game Alpha</td><td>Demo</td></tr><tr><td>Game Beta</td><td>Demo</td></tr><tr><td>Game Gamma</td><td>Demo</td></tr></table></div>';
+a.innerHTML=`
+<div class="panel">
+<h3>Game Catalogue</h3>
+<table><tr><th>Game</th><th>Category</th><th>Status</th></tr>
+<tr><td>Game Alpha</td><td>Arcade</td><td class="status">Listed</td></tr>
+<tr><td>Game Beta</td><td>Strategy</td><td class="status">Listed</td></tr>
+<tr><td>Game Gamma</td><td>Classic</td><td class="status">Listed</td></tr>
+</table>
+</div>`;
+}
+if(p==='ledger'){
+a.innerHTML=`
+<div class="panel">
+<h3>Test Ledger</h3>
+<p class="muted">This ledger interface is for test records only.</p>
+<table><tr><th>Reference</th><th>Type</th><th>Credits</th></tr>
+<tr><td>TEST-001</td><td>Test entry</td><td>500</td></tr>
+<tr><td>TEST-002</td><td>Test entry</td><td>250</td></tr>
+<tr><td>TEST-003</td><td>Test entry</td><td>100</td></tr>
+</table>
+</div>`;
 }
 if(p==='reports'){
-a.innerHTML='<h2>Reports</h2><div class="panel"><h3>Analytics</h3><p style="margin-top:15px;color:#94a3b8">Demo analytics will appear here.</p></div>';
+a.innerHTML=`
+<div class="cards">
+<div class="card"><p>Daily Activity</p><h2>124</h2></div>
+<div class="card"><p>New Accounts</p><h2>18</h2></div>
+</div>
+<div class="panel"><h3>Reports</h3><p class="muted">Reporting interface ready for database integration.</p></div>`;
 }
 if(p==='settings'){
-a.innerHTML='<h2>Settings</h2><div class="panel"><h3>System Configuration</h3><p style="margin-top:15px;color:#94a3b8">Demo configuration panel.</p><p style="margin-top:10px;color:#5eead4">Demo mode enabled</p></div>';
+a.innerHTML=`
+<div class="panel">
+<h3>System Settings</h3>
+<p class="muted">Interface settings</p>
+<input placeholder="System name" value="Arcadia">
+<input placeholder="Admin email">
+<button class="action" onclick="alert('Interface preview only. Settings are not stored yet.')">Save Preview</button>
+</div>`;
 }
 }
-page('dashboard');
+showPage('dashboard',document.querySelector('.menu button'));
 </script>
 </body>
-</html
+</html>
